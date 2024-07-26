@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather app</title>
+    <link rel="stylesheet" href="./style.css">
+    
+</head>
+<body>
+  <div class="card">
+      <div class="search">
+        <input type="text" placeholder="enter city name" spellcheck="false">
+        <button>
+            <img src="images/search.jpg" alt="">
+        </button>
+      </div>
+
+      <div class="error">
+          <p>Invalid city name</p>
+      </div>
+
+      <br><br>
+      <div class="weather">
+         <img src="images/rain.png" alt="" class="weather-icon"><br><br>
+         <h1 class="temp">22°c</h1>
+         <h2 class="city">Faridabad</h2>
+
+
+         <div class="details">
+             <div class="col">
+              <img src="images/humidity.jpg" alt="">
+               <div>
+                <p class="humidity">50%</p>
+                <p>humidity</p>
+               </div>
+             </div>
+             
+
+             <div class="col">
+              <img src="images/wind.png" alt="">
+               <div>
+                <p class="wind">4.64 Km/h</p>
+                <p>Wind Speed</p>
+               </div>
+             </div>
+
+         </div>
+      </div>
+  </div>
+  
+  
+
+
+  <script>
+
+const apiKey ="d88aed659102f5a71258a3bfd10bbee9";
+      const apiUrl ="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+
+      document.querySelector(".error").style.display = "none";
+     
+      async function checkWeather(city){
+        const response = await fetch(apiUrl + city +  `&appid=${apiKey}`);
+
+        if (response.status == 404){
+          document.querySelector(".error").style.display = "block";
+          document.querySelector(".weather").style.display = "none";
+        }else{
+        var data = await response.json();
+        console.log(data);
+
+        document.querySelector(".temp").innerHTML = data.main.temp + "°c";
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " Km/h";
+
+
+      if (data.weather[0].main === "Clouds") {
+        document.querySelector(".weather-icon").src = "images/clouds.jpg";
+      }else if(data.weather[0].main === "clear") {
+        document.querySelector(".weather-icon").src = "images/clear.jpg";
+      }else if(data.weather[0].main === "rain") {
+        document.querySelector(".weather-icon").src = "images/rain.png";
+      }else if (data.weather[0].main === "Drizzle") {
+        document.querySelector(".weather-icon").src = "images/drizzle.jpg";
+      }else if (data.weather[0].main === "Mist") {
+        document.querySelector(".weather-icon").src = "images/mist.jpg";
+      }
+      document.querySelector(".error").style.display = "none";
+      document.querySelector(".weather").style.display = "block";
+        }
+   }
+
+   searchBtn.addEventListener("click", () => {
+    checkWeather(searchBox.value);
+   })
+
+
+    
+
+  
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- https://api.openweathermap.org/data/2.5/weather?unit=metric&q=bangalore&appid=d88aed659102f5a71258a3bfd10bbee9 -->
